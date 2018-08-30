@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-echo-bar
+spec:
+  selector:
+    matchLabels:
+      app: echo-bar
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: echo-bar
+    spec:
+      containers:
+      - name: nodejs
+        image: google/nodejs
+        ports:
+        - containerPort: 80
+        command: ["/bin/sh"]
+        args: ["-c", "echo \"function r(request,response){response.writeHead(200,{'Content-Type':'text/plain'});response.write(process.env.MYNAME);response.end(' ');}require('http').createServer(r).listen(80);\" | node"]
+        env:
+        - name: MYNAME
+          value: bar
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-echo-bar
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: echo-bar

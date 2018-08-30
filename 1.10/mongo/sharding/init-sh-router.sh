@@ -1,0 +1,1 @@
+for i in 0 1 2; do kubectl exec mongodb-router-0 -- mongo --eval "sh.addShard('datanode$i/mongodb-datanode$i-0.mongodb-datanode$i.default.svc.cluster.local:27019,mongodb-datanode$i-1.mongodb-datanode$i.default.svc.cluster.local:27019,mongodb-datanode$i-2.mongodb-datanode$i.default.svc.cluster.local:27019');"; done;

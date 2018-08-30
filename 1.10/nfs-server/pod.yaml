@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume
+spec:
+  restartPolicy: Never
+  containers:
+  - image: nginx
+    name: nginx
+    volumeMounts:
+    - mountPath: /cache
+      name: test-volume
+  volumes:
+    - name: test-volume
+      persistentVolumeClaim:
+        claimName: nfs
+

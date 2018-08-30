@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-controller
+spec:
+  selector:
+    matchLabels:
+      app: tf-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: tf-controller
+    spec:
+      serviceAccountName: tensorflow-controller
+      containers:
+      - name: controller-container
+        image: ncy9371/tensorflow-controller:v3
+        command: ["sh", "-c", "/app; sleep 1000;"]
+

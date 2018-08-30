@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-router
+  labels:
+    name: mongo
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    role: mongo-router
+
+---
+
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mongodb-router
+spec:
+  serviceName: mongodb-router
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        role: mongo-router
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongod-container
+          image: mongo
+          command:
+            - "mongos"
+            - "--bind_ip"
+            - "0.0.0.0"
+            - "--port"
+            - "27017"
+            - "--configdb"
+            - "configdb/mongodb-cfgserver-0.mongodb-cfgserver.default.svc.cluster.local:27018,mongodb-cfgserver-1.mongodb-cfgserver.default.svc.cluster.local:27018,mongodb-cfgserver-2.mongodb-cfgserver.default.svc.cluster.local:27018"
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 200Mi
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: mongodb-persistent-storage-claim
+              mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-persistent-storage-claim
+    spec:
+      storageClassName: mongo-router
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

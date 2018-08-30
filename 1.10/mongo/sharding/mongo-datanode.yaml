@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-datanode0
+  labels:
+    name: mongo
+spec:
+  ports:
+  - port: 27019
+    targetPort: 27019
+  clusterIP: None
+  selector:
+    role: mongo-datanode0
+
+---
+
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: mongodb-datanode0
+spec:
+  serviceName: mongodb-datanode0
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        role: mongo-datanode0
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: mongod-container
+          image: mongo
+          command:
+            - "mongod"
+            - "--shardsvr"
+            - "--wiredTigerCacheSizeGB"
+            - "0.1"
+            - "--bind_ip"
+            - "0.0.0.0"
+            - "--port"
+            - "27019"
+            - "--replSet"
+            - "datanode0"
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 200Mi
+          ports:
+            - containerPort: 27019
+          volumeMounts:
+            - name: mongodb-persistent-storage-claim
+              mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongodb-persistent-storage-claim
+    spec:
+      storageClassName: mongo-datanode
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi

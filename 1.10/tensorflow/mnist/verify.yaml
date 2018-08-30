@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: verify
+  labels:
+    tf: worker
+spec:
+  subdomain: tf-service
+  hostname: verify
+  restartPolicy: Never
+  containers:
+  - name: tensorflow
+    image: tensorflow/tensorflow
+    ports:
+    - name: tf-server
+      containerPort: 2222
+    env:
+    - name: TASK_INDEX
+      value: "0"
+    command: ["/bin/bash", "-c"]
+    args: ["
+    curl http://ericyeh.tk:1080/verify.py -o /verify.py && \
+    python /verify.py \
+    --ps_hosts=ps0.tf-service.default.svc.cluster.local:2222 \
+    --worker_hosts=verify.tf-service.default.svc.cluster.local:2222 \
+    --job_name=worker --task_index=$TASK_INDEX
+    "]

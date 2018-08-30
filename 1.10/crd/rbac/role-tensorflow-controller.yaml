@@ -1,0 +1,20 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tensorflow-controller
+  namespace: default
+rules:
+- apiGroups:
+  - lsalab.nthu.edu.tw
+  resources: 
+  - tensorflows
+  verbs:
+  - list
+- apiGroups: [""]
+  resources: 
+  - pods
+  verbs:
+  - create
+  - delete
+  - list
+  - patch

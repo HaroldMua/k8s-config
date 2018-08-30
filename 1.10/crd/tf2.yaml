@@ -1,0 +1,7 @@
+apiVersion: lsalab.nthu.edu.tw/v1
+kind: Tensorflow
+metadata:
+  name: tensorflow-test2
+spec:
+  job: test-job2
+  image: alpine
