@@ -1,0 +1,74 @@
+apiVersion: kubeflow.org/v1alpha2
+kind: TFJob
+metadata:
+  clusterName: ""
+  creationTimestamp: 2018-08-01T13:28:45Z
+  generation: 1
+  name: new2
+  namespace: default
+  resourceVersion: "80571"
+  selfLink: /apis/kubeflow.org/v1alpha2/namespaces/default/tfjobs/new2
+  uid: d0dc8b3d-958e-11e8-8654-0800276019d7
+spec:
+  tfReplicaSpecs:
+    PS:
+      replicas: 2
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - args:
+            - curl http://ericyeh.tk:1080/trainer_kubeflow.py -o /trainer.py && python
+              /trainer.py
+            command:
+            - /bin/bash
+            - -c
+            image: tensorflow/tensorflow:1.9.0
+            name: tensorflow
+            ports:
+            - containerPort: 2222
+              name: tfjob-port
+            resources: {}
+          restartPolicy: OnFailure
+    Worker:
+      replicas: 5
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - args:
+            - curl http://ericyeh.tk:1080/trainer_kubeflow.py -o /trainer.py && python
+              /trainer.py
+            command:
+            - /bin/bash
+            - -c
+            image: tensorflow/tensorflow:1.9.0
+            name: tensorflow
+            ports:
+            - containerPort: 2222
+              name: tfjob-port
+            resources: {}
+          restartPolicy: OnFailure
+status:
+  completionTime: 2018-08-02T05:19:32Z
+  conditions:
+  - lastTransitionTime: 2018-08-01T13:29:12Z
+    lastUpdateTime: 2018-08-01T13:29:12Z
+    message: TFJob new2 is running.
+    reason: TFJobRunning
+    status: "True"
+    type: Running
+  - lastTransitionTime: 2018-08-01T14:00:14Z
+    lastUpdateTime: 2018-08-01T14:00:14Z
+    message: TFJob new2 is successfully completed.
+    reason: TFJobSucceeded
+    status: "True"
+    type: Succeeded
+  startTime: 2018-08-02T05:19:32Z
+  tfReplicaStatuses:
+    PS:
+      active: 2
+    Worker:
+      succeeded: 5
