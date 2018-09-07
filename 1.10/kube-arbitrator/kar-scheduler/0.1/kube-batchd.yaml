@@ -15,6 +15,7 @@ spec:
         tier: control-plane
         version: second
     spec:
+      serviceAccountName: kar-scheduler
       containers:
       - command:
         - /bin/sh

@@ -18,11 +18,14 @@ spec:
       serviceAccountName: kar-scheduler
       containers:
       - name: kube-arbitrator
-        image: kubearbitrator/kar-scheduler:0.2
+        #image: kubearbitrator/kar-scheduler:0.2
+        image: ncy9371/kar-scheduler:20180907-1
+        command:
+        - /kube-batchd
         args:
         - --logtostderr
         - --v=3
-        #- --enable-namespace-as-queue
+        - --enable-namespace-as-queue
         imagePullPolicy: IfNotPresent
         resources:
           limits:
