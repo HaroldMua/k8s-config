@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-batchd
+  labels:
+    chart: kube-arbitrator-0.2.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-batchd
+  template:
+    metadata:
+      labels:
+        app: kube-batchd
+    spec:
+      containers:
+      - name: kube-arbitrator
+        image: kubearbitrator/kar-scheduler:0.2
+        args: ["--logtostderr", "--v", "3", "--enable-namespace-as-queue"]
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2048Mi
+          requests:
+            cpu: 2000m
+            memory: 2048Mi

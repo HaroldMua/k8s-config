@@ -41,20 +41,20 @@ def main(_):
       train_step = tf.train.GradientDescentOptimizer(learning_rate).minimize(cross_entropy, global_step=global_step)
 
     # The StopAtStepHook handles stopping after running given steps.
-    hooks=[tf.train.StopAtStepHook(last_step=100000)]
+    hooks=[tf.train.StopAtStepHook(last_step=10000)]
 
     # The MonitoredTrainingSession takes care of session initialization,
     # restoring from a checkpoint, saving to a checkpoint, and closing when done
     # or an error occurs.
     with tf.train.MonitoredTrainingSession(master=server.target,
                                            is_chief=(FLAGS['task_index'] == 0),
-                                           #checkpoint_dir="/tmp/train",
+                                           summary_dir="/tmp/train_logs",
                                            hooks=hooks) as mon_sess:
 
       steppp=0
       while not mon_sess.should_stop():
         #for _ in range(1000):
-        batch_xs, batch_ys = mnist.train.next_batch(100)
+        batch_xs, batch_ys = mnist.train.next_batch(1024)
         mon_sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
         steppp = steppp + 1
         #break

