@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kube-batchd
+  namespace: kube-arbitrator
   labels:
     chart: kube-arbitrator-0.2.0
 spec:
@@ -14,10 +15,14 @@ spec:
       labels:
         app: kube-batchd
     spec:
+      serviceAccountName: kar-scheduler
       containers:
       - name: kube-arbitrator
         image: kubearbitrator/kar-scheduler:0.2
-        args: ["--logtostderr", "--v", "3", "--enable-namespace-as-queue"]
+        args:
+        - --logtostderr
+        - --v=3
+        #- --enable-namespace-as-queue
         imagePullPolicy: IfNotPresent
         resources:
           limits:
