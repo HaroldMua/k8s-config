@@ -19,9 +19,9 @@ spec:
       containers:
       - name: kube-arbitrator
         #image: kubearbitrator/kar-scheduler:0.2
-        image: ncy9371/kar-scheduler:20180907-1
-        command:
-        - /kube-batchd
+        image: kubesigs/kube-batchd:v0.2
+        #command:
+        #- /kube-batchd
         args:
         - --logtostderr
         - --v=3
