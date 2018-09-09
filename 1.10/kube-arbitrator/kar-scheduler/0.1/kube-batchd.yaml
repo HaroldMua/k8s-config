@@ -19,8 +19,9 @@ spec:
       - command:
         - /bin/sh
         - -c
-        - touch /tmp/healthy; /kube-batchd --scheduler-name kube-batchd; rm -f /tmp/healthy
-        image: ncy9371/kar-scheduler:v0.1-20180907-1
+        - touch /tmp/healthy; /opt/kube-batchd --scheduler-name kube-batchd; rm -f /tmp/healthy
+        #image: ncy9371/kar-scheduler:v0.1-20180907-1
+        image: kubesigs/kube-batchd:v0.1
         livenessProbe:
           exec:
             command:

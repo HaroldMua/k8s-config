@@ -1,0 +1,43 @@
+apiVersion: kubeflow.org/v1alpha2
+kind: TFJob
+metadata:
+  name: gpu1
+  namespace: default
+spec:
+  tfReplicaSpecs:
+    PS:
+      replicas: 1
+      template:
+        spec:
+          containers:
+          - args:
+            - curl http://ericyeh.tk:1080/trainer.py -o /trainer.py && python /trainer.py
+            command:
+            - /bin/bash
+            - -c
+            image: tensorflow/tensorflow:1.10.1
+            name: tensorflow
+            ports:
+            - containerPort: 2222
+              name: tfjob-port
+            resources: {}
+          restartPolicy: OnFailure
+    Worker:
+      replicas: 1
+      template:
+        spec:
+          containers:
+          - args:
+            - curl http://ericyeh.tk:1080/trainer.py -o /trainer.py && python /trainer.py
+            command:
+            - /bin/bash
+            - -c
+            image: tensorflow/tensorflow:1.10.1-gpu
+            name: tensorflow
+            ports:
+            - containerPort: 2222
+              name: tfjob-port
+            resources:
+              limits:
+                nvidia.com/gpu: 1
+          restartPolicy: OnFailure

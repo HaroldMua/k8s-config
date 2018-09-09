@@ -25,7 +25,7 @@ spec:
             resources: {}
           restartPolicy: OnFailure
     Worker:
-      replicas: 2
+      replicas: 1
       template:
         metadata:
           creationTimestamp: null
