@@ -56,4 +56,6 @@ spec:
             name: mydata
       volumes:
         - name: mydata
-          emptyDir: {}
+          #emptyDir: {}
+          hostPath:
+            path: /tmp/k8s-nfs
